@@ -1,0 +1,87 @@
+<!--CSU44000 Internet Applications Assignment 2-->
+<!--Simple Movie DB App-->
+<!--Pulkit Sharma-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Internet Applications Assignmnet 2</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1 align="center">Welcome to AWS Movies DB</h1><br>
+        <button v-on:click="Create">Create Table</button><br><br>
+        <button v-on:click="Destroy">Delete Table</button><br><br>
+        <div>Looking for some movie information?</div><br>
+        Enter Title: <input v-model="title"> Enter Year: <input v-model="year">
+        <button v-on:click="Query(year, title)">Query</button><br><br>
+        
+<!--Defining the table-->
+
+    <table border="1" align="center">
+        
+        <caption style="color: red;"><b>Movie Data in Database</b>
+        </caption>
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Year</th>
+                <th>Rating</th>
+                <th>Rank</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in responseList">
+                <td v-for="item in row">
+                    {{item}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                title:'',
+                year:'',
+                responseList : [],
+            },
+            methods: {
+                Create: create,
+                Destroy: destroy,
+                Query: query
+            }
+        })
+
+        function create() {
+            let prom = fetch('/create', {method:'POST'})
+            prom.then(response => response.json())
+                .then(response => {
+                })
+        }
+
+        function destroy(){
+            let prom = fetch('/destroy', {method:'POST'})
+            prom.then(response => response.json())
+                .then(response => {
+                })
+        }
+
+        function query(year, title) {
+            let prom = fetch('/query/'+title+'/'+year, {method:'POST'})
+            prom.then(response => response.json())
+                .then(response => {
+                    this.responseList = response.dataEntry
+                })
+        }
+    </script>
+</body>
+
+</html>
